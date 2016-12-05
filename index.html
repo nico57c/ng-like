@@ -1,0 +1,285 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <style>
+    /* Space out content a bit */
+    body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    /* Everything but the jumbotron gets side spacing for mobile first views */
+    .header,
+    .marketing,
+    .footer {
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    /* Custom page header */
+    .header {
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    /* Make the masthead heading the same height as the navigation */
+    .header h3 {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 40px;
+    }
+
+    /* Custom page footer */
+    .footer {
+      padding-top: 19px;
+      color: #777;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    /* Customize container */
+    @media (min-width: 768px) {
+      .container {
+        max-width: 730px;
+      }
+    }
+    .container-narrow > hr {
+      margin: 30px 0;
+    }
+
+    /* Main marketing message and sign up button */
+    .jumbotron {
+      text-align: center;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .jumbotron .btn {
+      padding: 14px 24px;
+      font-size: 21px;
+    }
+
+    /* Supporting marketing content */
+    .marketing {
+      margin: 40px 0;
+    }
+    .marketing p + h4 {
+      margin-top: 28px;
+    }
+
+    /* Responsive: Portrait tablets and up */
+    @media screen and (min-width: 768px) {
+      /* Remove the padding we set earlier */
+      .header,
+      .marketing,
+      .footer {
+        padding-right: 0;
+        padding-left: 0;
+      }
+      /* Space out the masthead */
+      .header {
+        margin-bottom: 30px;
+      }
+      /* Remove the bottom border on the jumbotron for visual effect */
+      .jumbotron {
+        border-bottom: 0;
+      }
+    }
+    </style>
+</head>
+<body ngl-module="Main" ngl-components="['NglDirectives']" ngl-directives="['If', 'Repeat', 'Bind', 'Class', 'Checked', 'Attr', 'Filter']">
+    <div class="container">
+
+      <div class="header clearfix" ngl-controller="MenuController">
+        <nav>
+          <ul class="nav nav-pills pull-right" >
+            <li ngl-repeat="menuItems" ngl-value="active" ngl-key="name" role="presentation" class="active" ngl-class="{ active: this.active }">
+                <a href="#"><span ngl-bind="name"></span></a>
+            </li>
+          </ul>
+        </nav>
+        <h3 class="text-muted" ngl-bind="projectName"><h3>
+      </div>
+
+      <div class="jumbotron" ngl-controller="MenuController">
+        <h1 ngl-bind="projectName"></h1>
+        <p class="lead" ngl-bind="projectDescr"></p>
+        <p><a class="btn btn-lg btn-success" href="https://github.com/nico57c/ng-like" role="button" ngl-bind="githubLink"></a></p>
+      </div>
+
+      <div class="row marketing" ngl-controller="BindingTestController">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <h4 ngl-bind="testTitle"></h4>
+          <div>
+              <form>
+                  <input type="text" name="testBinding1" placeholder="Saisir une valeur"/>
+              </form>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <h4>&nbsp;</h4>
+          <div ngl-bind="testBinding1"></div>
+        </div>
+      </div>
+
+      <div class="row marketing" ngl-controller="RepeatTestController">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <h4 ngl-bind="testTitle"></h4>
+          <div>
+              <div>
+                  <input type="checkbox" id="myList_A" name="myList[]" value="A" />
+                  <label for="myList_A">Value A</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="myList_B" name="myList[]" value="B" />
+                  <label for="myList_B">Value B</label>
+              </div>
+              <div>
+                  <input type="checkbox" id="myList_C" name="myList[]" value="C" />
+                  <label for="myList_C">Value C</label>
+              </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <h4>&nbsp;</h4>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div ngl-repeat="testList" ngl-key="item" ngl-value="checked">
+                  <span ngl-if="this.checked" class="glyphicon glyphicon-check"></span>
+                  <span ngl-if="!this.checked" class="glyphicon glyphicon-unchecked"></span>
+                  <span ngl-bind="item"></span>
+              </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div ngl-repeat="testList" ngl-key="item" ngl-value="checked">
+                  <div>
+                      <input type="checkbox" name="myMirrorList[]"
+                          ngl-attr="{'value': this.item, 'id': 'myMirrorList_' + this.item}"
+                          ngl-checked="this.checked" />
+                      <label ngl-attr="{'for': 'myMirrorList_' + this.item}" >Value <span ngl-bind="item"></span></label>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row marketing" ngl-controller="FilterTestController">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <h4 ngl-bind="testTitle"></h4>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                <input name="filterName" value="" placeholder="filter"/>
+                                <br/><br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Index</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ngl-repeat="dataFiltered" ngl-key="index" ngl-value="dataVal" ngl-filter="this.filter" ngl-filter-key="dataFiltered">
+                            <td ngl-bind="index"></td>
+                            <td ngl-bind="this.dataVal.name" ngl-bind-key="dataVal"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <p>&copy; 2016 Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <script src="ng-like-scopes.js"></script>
+    <script src="ng-like-events.js"></script>
+    <!--<script src="ng-like-binding.js"></script>-->
+    <script src="ng-like-directives.js"></script>
+    <script src="directives/ng-like-d-bind.js"></script>
+    <script src="directives/ng-like-d-repeat.js"></script>
+    <script src="directives/ng-like-d-if.js"></script>
+    <script src="directives/ng-like-d-class.js"></script>
+    <script src="directives/ng-like-d-attr.js"></script>
+    <script src="directives/ng-like-d-checked.js"></script>
+    <script src="directives/ng-like-d-filter.js"></script>
+    <script src="ng-like.js"></script>
+
+    <script type="text/javascript">
+        (function($){
+            Ngl.module('Main').ngl_controller('MenuController', ['$scopeMenu', '$root'], function($scope, $root){
+                $scope.projectName = 'Ng-Like';
+                $scope.projectDescr = 'AngularJs like based on JQuery : ngl-repeat, ngl-bind, ngl-if, ngl-class, ngl-attr, ngl-checked.';
+                $scope.githubLink = 'ng-like on github';
+                $scope.menuItems = [];
+                $scope.menuItems['Home'] = true;
+                $scope.menuItems['Sources (github)'] = false;
+                $scope.menuItems['Contact'] = false;
+                $scope.$apply();
+            }).ngl_controller('BindingTestController', ['$scopeBinding','$root'], function($scope, $root){
+                $scope.testTitle = 'BindingTest  ';
+                $scope.testBinding1 = '';
+                this.controller.element.find('[name=testBinding1]').bind('change paste keyup', function(){
+                    if($scope.testTitle.substr(-1)=='-'){
+                        $scope.testTitle = $scope.testTitle.substr(0, $scope.testTitle.length-1) + '|';
+                    } else {
+                        $scope.testTitle = $scope.testTitle.substr(0, $scope.testTitle.length-1) + '-';
+                    }
+                    $scope.testBinding1 = $(this).val();
+                    $scope.$apply();
+                });
+                $scope.$apply();
+            }).ngl_controller('RepeatTestController', ['$scopeRepeat', '$root'], function($scope, $root){
+                $scope.testTitle = 'RepeatTest';
+                $scope.testList = [];
+                $scope.testList['A'] = false;
+                $scope.testList['B'] = false;
+                $scope.testList['C'] = false;
+                this.controller.element.find('[name="myList[]"]').bind('click', function(){
+                    $scope.testList = $scope.testList?$scope.testList:[];
+                    $scope.testList[$(this).val()] = $(this).prop('checked');
+                    $scope.$apply();
+                });
+                $scope.$apply();
+            }).ngl_controller('FilterTestController', ['$scopeFilter', '$root'], function($scope, $root){
+                $scope.testTitle = 'FilterTest';
+                $scope.filter = null;
+                $scope.data = [];
+                $scope.data.push({'name':'Roslyn'});
+                $scope.data.push({'name':'Louvenia'});
+                $scope.data.push({'name':'Angelic'});
+                $scope.data.push({'name':'Callie'});
+                $scope.data.push({'name':'Kip'});
+                $scope.data.push({'name':'Genevieve'});
+                $scope.data.push({'name':'Minta'});
+                $scope.data.push({'name':'Avery'});
+                $scope.data.push({'name':'Maya'});
+                $scope.data.push({'name':'Cherie'});
+                $scope.data.push({'name':'Manie'});
+                $scope.data.push({'name':'Maxima'});
+                $scope.data.push({'name':'Marybeth'});
+                $scope.data.push({'name':'Kristeen'});
+                $scope.data.push({'name':'Xochitl'});
+                $scope.data.push({'name':'Mavis'});
+                $scope.data.push({'name':'Rossana'});
+                $scope.data.push({'name':'Jeni'});
+                $scope.data.push({'name':'Ivey'});
+                $scope.data.push({'name':'Shelby'});
+                $scope.dataFiltered = $scope.data;
+
+                this.controller.element.find('[name="filterName"]').bind('change paste keyup', function(){
+                    if($(this).val().length>0){
+                        $scope.filter = {'name': $(this).val()};
+                    } else {
+                        $scope.filter = null;
+                    }
+                    $scope.dataFiltered = $scope.data;
+                    $scope.$apply();
+                });
+                $scope.$apply();
+            });
+        })(jQuery);
+    </script>
+</body>
+
+</html>
