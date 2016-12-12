@@ -26,7 +26,6 @@ NglDFilter.prototype = {
        return result;
     },
     run: function(){
-        console.log('testrun', this.__key );
         $(this.__element).removeAttr('ngl-filter');
         $(this.__element).removeAttr('ngl-filter-key');
         if(this.module.scopes.has( this.__key )) {
@@ -62,7 +61,6 @@ NglDFilter.prototype = {
                     res[index] = array[index];
                 }
             }
-            console.log('test', res, testAttr);
             this.module.scopes.set($(this.__elementClone).attr('ngl-filter-key'), res);
         }
     }

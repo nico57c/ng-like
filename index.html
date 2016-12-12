@@ -84,7 +84,8 @@
     }
     </style>
 </head>
-<body ngl-module="Main" ngl-components="['NglDirectives']" ngl-directives="['If', 'Repeat', 'Bind', 'Class', 'Checked', 'Attr', 'Filter']">
+<body ngl-module="Main" ngl-components="['NglDirectives', 'NglRouter']"
+      ngl-directives="['If', 'Repeat', 'Bind', 'Class', 'Checked', 'Attr', 'Filter', 'Pattern', 'Link', 'Router']">
     <div class="container">
 
       <div class="header clearfix" ngl-controller="MenuController">
@@ -98,10 +99,28 @@
         <h3 class="text-muted" ngl-bind="projectName"><h3>
       </div>
 
-      <div class="jumbotron" ngl-controller="MenuController">
-        <h1 ngl-bind="projectName"></h1>
-        <p class="lead" ngl-bind="projectDescr"></p>
-        <p><a class="btn btn-lg btn-success" href="https://github.com/nico57c/ng-like" role="button" ngl-bind="githubLink"></a></p>
+      <div ngl-controller="MenuController">
+        <div class="jumbotron">
+            <h1 ngl-bind="projectName"></h1>
+            <p class="lead" ngl-bind="projectDescr"></p>
+            <p><a class="btn btn-lg btn-success" href="https://github.com/nico57c/ng-like" role="button" ngl-bind="githubLink"></a></p>
+        </div>
+        <div ngl-router>
+            <ul class="nav nav-tabs" ngl-link-toggle-class="active" ngl-link-toggle-select="li">
+              <li role="presentation" class="active">
+                  <a ngl-link="/test/binding">Binding</a>
+              </li>
+              <li role="presentation">
+                  <a ngl-link="/test/repeat">Repeat</a>
+              </li>
+              <li role="presentation">
+                  <a ngl-link="/test/filter">Filter</a>
+              </li>
+              <li role="presentation">
+                  <a ngl-link="/test/pattern">Pattern</a>
+              </li>
+            </ul>
+        </div>
       </div>
 
       <div class="row marketing" ngl-controller="BindingTestController">
@@ -119,7 +138,7 @@
         </div>
       </div>
 
-      <div class="row marketing" ngl-controller="RepeatTestController">
+      <div class="row marketing" ngl-controller="RepeatTestController" style="display:none">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
           <h4 ngl-bind="testTitle"></h4>
           <div>
@@ -159,7 +178,7 @@
         </div>
       </div>
 
-      <div class="row marketing" ngl-controller="FilterTestController">
+      <div class="row marketing" ngl-controller="FilterTestController" style="display:none">
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <h4 ngl-bind="testTitle"></h4>
             <div>
@@ -186,15 +205,31 @@
             </div>
         </div>
       </div>
-      <footer class="footer">
-        <p>&copy; 2016 Company, Inc.</p>
-      </footer>
+
+      <div class="row marketing" ngl-controller="PatternTestController" style="display:none">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <h4 ngl-bind="testTitle"></h4>
+            <div>
+                <input name="myPattern" value="" placeholder="Pattern"/>
+                <input name="myTestVal" value="" ngl-pattern="this.pattern" placeholder="Test"/>
+            </div>
+            <div>
+                <span>Test "<span ngl-bind="testVal"></span>" with pattern "<span ngl-bind="pattern"></span>"</span>
+                <div>Result of pattern : <span ngl-if="true==this.myTestVal_valid">True</span> <span ngl-if="false==this.myTestVal_valid">False</span>
+                </div>
+            </div>
+          </div>
+      </div>
+
+<footer class="footer">
+    <p>&copy; 2016 Company, Inc.</p>
+</footer>
 
     </div> <!-- /container -->
 
     <script src="ng-like-scopes.js"></script>
     <script src="ng-like-events.js"></script>
-    <!--<script src="ng-like-binding.js"></script>-->
+    <script src="ng-like-router.js"></script>
     <script src="ng-like-directives.js"></script>
     <script src="directives/ng-like-d-bind.js"></script>
     <script src="directives/ng-like-d-repeat.js"></script>
@@ -203,11 +238,35 @@
     <script src="directives/ng-like-d-attr.js"></script>
     <script src="directives/ng-like-d-checked.js"></script>
     <script src="directives/ng-like-d-filter.js"></script>
+    <script src="directives/ng-like-d-pattern.js"></script>
+    <script src="directives/ng-like-d-link.js"></script>
+    <script src="directives/ng-like-d-router.js"></script>
     <script src="ng-like.js"></script>
 
     <script type="text/javascript">
         (function($){
-            Ngl.module('Main').ngl_controller('MenuController', ['$scopeMenu', '$root'], function($scope, $root){
+            var module = Ngl.module('Main');
+            module.events.register('ngl-router-init', function(){
+                var toggleSelect = '[ngl-controller=BindingTestController],'+
+                                   '[ngl-controller=RepeatTestController],'+
+                                   '[ngl-controller=FilterTestController],'+
+                                   '[ngl-controller=PatternTestController]'
+                module.router.mapping({
+                    '/test/binding': {
+                        controller: {name: 'BindingTestController', action: 'toggle', toggle_select: toggleSelect}
+                    },
+                    '/test/repeat': {
+                        controller: {name: 'RepeatTestController', action: 'toggle', toggle_select: toggleSelect}
+                    },
+                    '/test/filter': {
+                        controller: {name: 'FilterTestController', action: 'toggle', toggle_select: toggleSelect}
+                    },
+                    '/test/pattern': {
+                        controller: {name: 'PatternTestController', action: 'toggle', toggle_select: toggleSelect}
+                    }
+                });
+            });
+            module.ngl_controller('MenuController', ['$scopeMenu', '$root'], function($scope, $root){
                 $scope.projectName = 'Ng-Like';
                 $scope.projectDescr = 'AngularJs like based on JQuery : ngl-repeat, ngl-bind, ngl-if, ngl-class, ngl-attr, ngl-checked.';
                 $scope.githubLink = 'ng-like on github';
@@ -274,6 +333,21 @@
                         $scope.filter = null;
                     }
                     $scope.dataFiltered = $scope.data;
+                    $scope.$apply();
+                });
+                $scope.$apply();
+            }).ngl_controller('PatternTestController', ['$scopePattern', '$root'], function($scope, $root){
+                $scope.testTitle = 'PatternTest';
+                $scope.pattern = '';
+                $scope.testVal = '';
+                $scope.myTestVal_valid = false;
+
+                this.controller.element.find('[name=myPattern]').bind('change paste keyup', function(){
+                    $scope.pattern = $(this).val();
+                    $scope.$apply();
+                });
+                this.controller.element.find('[name=myTestVal]').bind('change paste keyup', function(){
+                    $scope.testVal = $(this).val();
                     $scope.$apply();
                 });
                 $scope.$apply();

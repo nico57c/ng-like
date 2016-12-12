@@ -24,7 +24,8 @@ function NglDirectives(nglModuleProto, moduleInstance){
                 $.each(directive.selectOn.apply({
                         __controller: that.ngl_controller_object,
                         module: that.module,
-                        directives: that
+                        directives: that,
+                        currentDirective: directive
                     }, applyOn), function(key, elements) {
                         $(elements).each(function(index1, element){
 
@@ -85,7 +86,7 @@ function NglDirectives(nglModuleProto, moduleInstance){
         },
         prepareDirectives: function(options){
             var that = this.factory(options.controller.name,
-                options.directives?options.directives:['Filter', 'Repeat', 'If', 'Bind', 'Class', 'Checked', 'Attr'],
+                options.directives.length>0?options.directives:['Filter', 'Repeat', 'If', 'Bind', 'Class', 'Checked', 'Attr', 'Pattern'],
                 options.controller);
             that.ngl_directive(options.controller.element);
         },

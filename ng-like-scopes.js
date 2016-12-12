@@ -12,8 +12,8 @@ function NglScopes(nglModuleProto, moduleInstance){
             for(var index in this.contextScopesList()){
                 if(undefined===this.ngl_scopes[this.contextScopesList()[index]]){
                     this.ngl_scopes[this.contextScopesList()[index]] = {
-                        __ngl_name:this.contextScopesList()[index],
-                        __ngl_context_name:this.contextName(),
+                        __ngl_name:this.contextScopesList()[index], // == name of scope in scopes applies to controller
+                        __ngl_context_name:this.contextName(),  // == controller name
                         __ngl_index: index,
                         __ngl_applyTo: [],
                         __ngl_events: this.contextEvents(),

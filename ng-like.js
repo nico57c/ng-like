@@ -26,6 +26,7 @@
                 }
                 return this;
             },
+            // ngl controller definition :
             ngl_controller_object: {
                 $: $,
                 module: {
@@ -38,6 +39,9 @@
                     element: null,
                     name: null
                 }
+            },
+            getControllerElement: function(controllerName){
+                return $(this.module.element).find('[ngl-controller="' + controllerName + '"]');
             },
             getComponentInstance: function(componentName){
                 if(undefined===this.ngl_components[componentName]){
